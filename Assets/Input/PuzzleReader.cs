@@ -26,7 +26,17 @@ public class PuzzleReader : MonoBehaviour
             this.rows = Int32.Parse(size[0].Trim());
             this.columns = Int32.Parse(size[1].Trim());
 
-            Debug.Log(this.rows + this.columns);
+            for (int index = 2; index < lines.Length; index++)
+            {
+                if (index < (2 + rows))
+                {
+                    rowSpecs.Add(lines[index]);
+                }
+                else if (index > (2 + rows))
+                {
+                    columnSpecs.Add(lines[index]);
+                }
+            }
         } else Debug.Log("No se encontró el archivo necesario de nivel");
     }
 }
