@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Nonogram : MonoBehaviour
 {
+    //propiedades va a tener la matri y los dos arrays por el momento
     // Start is called before the first frame update
     void Start()
     {

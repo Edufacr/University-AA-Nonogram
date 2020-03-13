@@ -16,7 +16,7 @@ public class PuzzleReader
         rowSpecs = new List<string>();
         columnSpecs = new List<string>();
         
-        Read();
+        Read(); // Para pruebas despues se quita para poder validar el bool de Read en otro lado
     }
 
     public int Rows => rows;
