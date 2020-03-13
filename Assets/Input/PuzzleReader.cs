@@ -17,6 +17,14 @@ public class PuzzleReader
         columnSpecs = new List<string>();
     }
 
+    public int Rows => rows;
+
+    public int Columns => columns;
+
+    public List<string> RowSpecs => rowSpecs;
+
+    public List<string> ColumnSpecs => columnSpecs;
+
     void Read()
     {
         if (File.Exists(path))
