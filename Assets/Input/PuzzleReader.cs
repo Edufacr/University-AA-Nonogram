@@ -27,7 +27,7 @@ public class PuzzleReader
 
     public List<string> ColumnSpecs => columnSpecs;
 
-    void Read()
+    bool Read()
     {
         if (File.Exists(path))
         {
@@ -48,7 +48,13 @@ public class PuzzleReader
                     columnSpecs.Add(lines[index]);
                 }
             }
-        } else Debug.Log(errorMsg); 
+            return true;
+        }
+        else
+        {
+            Debug.Log(errorMsg);
+            return false;
+        } 
     }
     
 }
