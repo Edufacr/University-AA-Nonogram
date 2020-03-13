@@ -14,12 +14,6 @@ public class NonogramCreator : MonoBehaviour
         reader.ColumnSpecs.ForEach(Debug.Log);
         reader.RowSpecs.ForEach(Debug.Log);
         int[,] matrix = new int[reader.Rows, reader.Columns];
-        
-        
-        foreach (string spec  in reader.ColumnSpecs)
-        {
-            
-        }
     }
 
     // Update is called once per frame
@@ -28,9 +22,22 @@ public class NonogramCreator : MonoBehaviour
         
     }
 
-    int[][] SpecsConvert(List<string> pList)
+    int[][] SpecsConvert(List<string> pList) //falta revisar si esta sirviendo
     {
-        return null;
+        List<int[]> retSpecs = new List<int[]>();
+        foreach (string stringSpecs in pList)
+        {
+            List<int> specContainer = new List<int>();
+            foreach (char charSpec in stringSpecs)
+            {
+                if (charSpec != ',')
+                {
+                    specContainer.Add((int)char.GetNumericValue(charSpec));
+                }
+            }
+            retSpecs.Add(specContainer.ToArray());
+        }
+        return retSpecs.ToArray();
     }
     
 }
