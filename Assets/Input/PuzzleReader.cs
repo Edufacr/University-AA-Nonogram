@@ -15,6 +15,8 @@ public class PuzzleReader
     {
         rowSpecs = new List<string>();
         columnSpecs = new List<string>();
+        
+        Read();
     }
 
     public int Rows => rows;
