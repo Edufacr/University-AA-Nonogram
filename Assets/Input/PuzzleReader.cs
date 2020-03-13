@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class PuzzleReader : MonoBehaviour
+public class PuzzleReader
 {
 
     private int rows, columns;
     private List<string> rowSpecs, columnSpecs;
+    private readonly string path = "Assets/Input/puzzle.txt";
+    private readonly string errorMsg = "No se encontró el archivo necesario de nivel";
 
     public PuzzleReader()
     {
@@ -15,9 +17,8 @@ public class PuzzleReader : MonoBehaviour
         columnSpecs = new List<string>();
     }
 
-    void Start()
+    void Read()
     {
-        string path = "Assets/Input/puzzle.txt";
         if (File.Exists(path))
         {
             string[] lines = File.ReadAllLines(path);
@@ -37,6 +38,7 @@ public class PuzzleReader : MonoBehaviour
                     columnSpecs.Add(lines[index]);
                 }
             }
-        } else Debug.Log("No se encontró el archivo necesario de nivel");
+        } else Debug.Log(errorMsg); 
     }
+    
 }
