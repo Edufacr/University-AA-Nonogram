@@ -10,7 +10,7 @@ public class NonogramCreator : MonoBehaviour
     void Start()
     {
         _reader = new PuzzleReader();
-        CreateNonogram("Assets/Input/puzzle.txt");
+        CreateNonogram("Assets/Input/puzzle.txt"); //temp hasta que se vea como se llama a crear el nonogram
     }
 
     public bool CreateNonogram(string pPath)

@@ -12,8 +12,7 @@ public class PuzzleReader
 
     public PuzzleReader()
     {
-        rowSpecs = new List<string>();
-        columnSpecs = new List<string>();
+
     }
 
     public int Rows => rows;
@@ -28,6 +27,9 @@ public class PuzzleReader
     {
         if (File.Exists(pPath))
         {
+            rowSpecs = new List<string>();
+            columnSpecs = new List<string>();
+            
             string[] lines = File.ReadAllLines(pPath);
             string[] size = lines[0].Split(',');
 
