@@ -14,22 +14,7 @@ public class NonogramCreator : MonoBehaviour
         int[,] matrix = new int[reader.Rows, reader.Columns];
         int[][] columnSpecs = SpecsConvert(reader.ColumnSpecs);
         int[][] rowSpecs = SpecsConvert(reader.RowSpecs);
-        
-        
-        /*foreach (int[] spec in columnSpecs)
-        {
-            foreach (int vari in spec)
-            {
-                Debug.Log(vari);
-            }
-        }
-        foreach (int[] spec in rowSpecs)
-        {
-            foreach (int vari in spec)
-            {
-                Debug.Log(vari);
-            }
-        }*/
+        //Hay que definir de que manera se inyectan estas variables
     }
 
     // Update is called once per frame
@@ -38,23 +23,19 @@ public class NonogramCreator : MonoBehaviour
         
     }
 
-    int[][] SpecsConvert(List<string> pSpecList) //falta revisar si esta sirviendo
+    int[][] SpecsConvert(List<string> pSpecList)
     {
         List<int[]> retSpecs = new List<int[]>();
         foreach (string lineSpec in pSpecList) {
-            Debug.Log("New Line");
-            Debug.Log(lineSpec);
-            string[] lineSpecGroups = lineSpec.Split(',');
-            
+            string[] lineSpecGroups = lineSpec.Split(',',' ');
             List<int> specGroup = new List<int>();
-            Debug.Log("Group");
             foreach (string num in lineSpecGroups)
             {
-                Debug.Log("Itera");
-                Debug.Log(num);
-                //specGroup.Add(int.Parse(num));
+                if (int.TryParse(num, out int intNum))
+                {
+                    specGroup.Add(int.Parse(num));
+                }
             }
-            
             retSpecs.Add(specGroup.ToArray());
         }
         return retSpecs.ToArray();
