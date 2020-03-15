@@ -11,7 +11,6 @@ public class MenuScript : MonoBehaviour
         //SceneManager.LoadScene("");
         //instead of specifying scene name, one can do SceneManager.GetActiveScene().buildIndex + 1;
         Debug.Log("Imagine solution here");
-        
     }
 
 
@@ -23,7 +22,7 @@ public class MenuScript : MonoBehaviour
 
     public void SelectPuzzle()
     {
-        string path = EditorUtility.OpenFilePanel("", "", "");
+        string path = EditorUtility.OpenFilePanel("", "", "txt");
         Debug.Log(path);
     }
 }
