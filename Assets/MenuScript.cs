@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class MenuScript : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class MenuScript : MonoBehaviour
 
     public void SelectPuzzle()
     {
-
+        string path = EditorUtility.OpenFilePanel("", "", "");
+        Debug.Log(path);
     }
 }
