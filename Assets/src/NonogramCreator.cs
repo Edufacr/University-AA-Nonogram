@@ -10,12 +10,13 @@ public class NonogramCreator : MonoBehaviour
     void Start()
     {
         PuzzleReader reader = new PuzzleReader();
-        reader.ColumnSpecs.ForEach(Debug.Log);
-        reader.RowSpecs.ForEach(Debug.Log);
+
         int[,] matrix = new int[reader.Rows, reader.Columns];
         int[][] columnSpecs = SpecsConvert(reader.ColumnSpecs);
         int[][] rowSpecs = SpecsConvert(reader.RowSpecs);
-        foreach (int[] spec in columnSpecs)
+        
+        
+        /*foreach (int[] spec in columnSpecs)
         {
             foreach (int vari in spec)
             {
@@ -28,7 +29,7 @@ public class NonogramCreator : MonoBehaviour
             {
                 Debug.Log(vari);
             }
-        }
+        }*/
     }
 
     // Update is called once per frame
@@ -37,20 +38,24 @@ public class NonogramCreator : MonoBehaviour
         
     }
 
-    int[][] SpecsConvert(List<string> pList) //falta revisar si esta sirviendo
+    int[][] SpecsConvert(List<string> pSpecList) //falta revisar si esta sirviendo
     {
         List<int[]> retSpecs = new List<int[]>();
-        foreach (string stringSpecs in pList)
-        {
-            List<int> specContainer = new List<int>();
-            foreach (char charSpec in stringSpecs)
+        foreach (string lineSpec in pSpecList) {
+            Debug.Log("New Line");
+            Debug.Log(lineSpec);
+            string[] lineSpecGroups = lineSpec.Split(',');
+            
+            List<int> specGroup = new List<int>();
+            Debug.Log("Group");
+            foreach (string num in lineSpecGroups)
             {
-                if (char.IsDigit(charSpec)) //Hay que tomar en cuenta que pueden ser mas de 9...
-                {
-                    specContainer.Add((int)char.GetNumericValue(charSpec));
-                }
+                Debug.Log("Itera");
+                Debug.Log(num);
+                //specGroup.Add(int.Parse(num));
             }
-            retSpecs.Add(specContainer.ToArray());
+            
+            retSpecs.Add(specGroup.ToArray());
         }
         return retSpecs.ToArray();
     }
