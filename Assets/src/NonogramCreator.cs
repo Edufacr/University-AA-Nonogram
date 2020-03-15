@@ -10,6 +10,7 @@ public class NonogramCreator : MonoBehaviour
     void Start()
     {
         PuzzleReader reader = new PuzzleReader();
+        reader.Read("Assets/Input/puzzle.txt");
         Nonogram puzzle = Nonogram.GetInstance();
         puzzle.Matrix = new int[reader.Rows, reader.Columns];
         puzzle.ColumnSpecs = SpecsConvert(reader.ColumnSpecs);
