@@ -2,18 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Nonogram : MonoBehaviour
+public class Nonogram
 {
-    //propiedades va a tener la matri y los dos arrays por el momento
-    // Start is called before the first frame update
-    void Start()
+    private int[,] _matrix;
+    private int[][] _columnSpecs;
+    private int[][] _rowsSpecs;
+
+    private static Nonogram _instance;
+
+    private Nonogram()
     {
-        
+        _matrix = null;
+        _columnSpecs = _rowsSpecs = null;
+        _instance = null;
     }
 
-    // Update is called once per frame
-    void Update()
+    private Nonogram(int[,] matrix, int[][] columnSpecs, int[][] rowsSpecs)
     {
-        
+        _matrix = matrix;
+        _columnSpecs = columnSpecs;
+        _rowsSpecs = rowsSpecs;
+    }
+
+    public static Nonogram GetInstance()
+    {
+        return _instance ?? (_instance = new Nonogram());
+    }
+
+    public int[,] Matrix
+    {
+        get => _matrix;
+        set => _matrix = value;
+    }
+
+    public int[][] ColumnSpecs
+    {
+        get => _columnSpecs;
+        set => _columnSpecs = value;
+    }
+
+    public int[][] RowsSpecs
+    {
+        get => _rowsSpecs;
+        set => _rowsSpecs = value;
     }
 }

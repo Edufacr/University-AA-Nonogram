@@ -8,15 +8,11 @@ public class PuzzleReader : MonoBehaviour
 
     private int rows, columns;
     private List<string> rowSpecs, columnSpecs;
-    private readonly string path = "Assets/Input/puzzle.txt";
     private readonly string errorMsg = "No se encontró el archivo necesario de nivel";
 
     public PuzzleReader()
     {
-        rowSpecs = new List<string>();
-        columnSpecs = new List<string>();
-        
-        Read(); // Para pruebas despues se quita para poder validar el bool de Read en otro lado
+
     }
 
     public int Rows => rows;
@@ -27,11 +23,14 @@ public class PuzzleReader : MonoBehaviour
 
     public List<string> ColumnSpecs => columnSpecs;
 
-    bool Read()
+    public bool Read(string pPath)
     {
-        if (File.Exists(path))
+        if (File.Exists(pPath))
         {
-            string[] lines = File.ReadAllLines(path);
+            rowSpecs = new List<string>();
+            columnSpecs = new List<string>();
+            
+            string[] lines = File.ReadAllLines(pPath);
             string[] size = lines[0].Split(',');
 
             this.rows = Int32.Parse(size[0].Trim());
