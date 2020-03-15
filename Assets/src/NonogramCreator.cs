@@ -10,11 +10,10 @@ public class NonogramCreator : MonoBehaviour
     void Start()
     {
         PuzzleReader reader = new PuzzleReader();
-
-        int[,] matrix = new int[reader.Rows, reader.Columns];
-        int[][] columnSpecs = SpecsConvert(reader.ColumnSpecs);
-        int[][] rowSpecs = SpecsConvert(reader.RowSpecs);
-        //Hay que definir de que manera se inyectan estas variables
+        Nonogram puzzle = Nonogram.GetInstance();
+        puzzle.Matrix = new int[reader.Rows, reader.Columns];
+        puzzle.ColumnSpecs = SpecsConvert(reader.ColumnSpecs);
+        puzzle.RowsSpecs = SpecsConvert(reader.RowSpecs);
     }
 
     // Update is called once per frame
