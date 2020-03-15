@@ -5,16 +5,24 @@ using UnityEngine;
 
 public class NonogramCreator : MonoBehaviour
 {
-    
+    private PuzzleReader _reader;
     // Start is called before the first frame update
     void Start()
     {
-        PuzzleReader reader = new PuzzleReader();
-        reader.Read("Assets/Input/puzzle.txt");
+        _reader = new PuzzleReader();
+        CreateNonogram("Assets/Input/puzzle.txt");
+    }
+
+    public bool CreateNonogram(string pPath)
+    {
+        if (!_reader.Read(pPath)) return false;
+        
         Nonogram puzzle = Nonogram.GetInstance();
-        puzzle.Matrix = new int[reader.Rows, reader.Columns];
-        puzzle.ColumnSpecs = SpecsConvert(reader.ColumnSpecs);
-        puzzle.RowsSpecs = SpecsConvert(reader.RowSpecs);
+        puzzle.Matrix = new int[_reader.Rows, _reader.Columns];
+        puzzle.ColumnSpecs = SpecsConvert(_reader.ColumnSpecs);
+        puzzle.RowsSpecs = SpecsConvert(_reader.RowSpecs);
+        return true;
+
     }
 
     // Update is called once per frame
