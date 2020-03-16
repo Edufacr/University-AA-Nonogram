@@ -2,18 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NonogramSolver : MonoBehaviour
+public class NonogramSolver
 {
-    
-    // Start is called before the first frame update
-    void Start()
+    private static NonogramSolver _instance;
+
+    private NonogramSolver()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public static NonogramSolver GetInstance()
     {
-        
+        return _instance ?? (_instance = new NonogramSolver());
+    }
+
+    public void Solve(Nonogram pNonogram, bool pAnimated)
+    {
+        if (!pAnimated)
+        {
+            RegularSolve(pNonogram);
+        }
+        else AnimatedSolve(pNonogram);
+    }
+
+    private void RegularSolve(Nonogram pNonogram)
+    {
+
+    }
+
+    private void AnimatedSolve(Nonogram pNonogram)
+    {
+
     }
 }
