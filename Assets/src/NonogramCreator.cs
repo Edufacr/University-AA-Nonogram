@@ -16,7 +16,7 @@ public class NonogramCreator
         CreateNonogram("Assets/Input/puzzle.txt"); //temp hasta que se vea como se llama a crear el nonogram
     }
 
-    public static NonogramCreator getInstance()
+    public static NonogramCreator GetInstance()
     {
         return _instance ?? (_instance = new NonogramCreator());
     }
@@ -33,7 +33,7 @@ public class NonogramCreator
 
     }
 
-    int[][] SpecsConvert(List<string> pSpecList)
+    private int[][] SpecsConvert(List<string> pSpecList)
     {
         List<int[]> retSpecs = new List<int[]>();
         foreach (string lineSpec in pSpecList) {
