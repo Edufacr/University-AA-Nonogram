@@ -11,6 +11,7 @@ public class MenuScript : MonoBehaviour
         //SceneManager.LoadScene("");
         //instead of specifying scene name, one can do SceneManager.GetActiveScene().buildIndex + 1;
         Debug.Log("Imagine solution here");
+        NonogramSolver.GetInstance().Solve(Nonogram.GetInstance(),false);
     }
 
 
