@@ -41,7 +41,7 @@ public class Nonogram
         set => _columnSpecs = value;
     }
 
-    public int[][] RowsSpecs
+    public int[][] RowSpecs
     {
         get => _rowsSpecs;
         set => _rowsSpecs = value;

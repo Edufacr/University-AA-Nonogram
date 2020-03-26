@@ -11,7 +11,49 @@ public class MenuScript : MonoBehaviour
         //SceneManager.LoadScene("");
         //instead of specifying scene name, one can do SceneManager.GetActiveScene().buildIndex + 1;
         Debug.Log("Imagine solution here");
-        NonogramSolver.GetInstance().Solve(Nonogram.GetInstance(),false);
+        NonogramCreator.GetInstance();
+        Nonogram nono = Nonogram.GetInstance();
+        string cols = "";
+        string rows = "";
+        string nonogram = "";
+        int rowNum = nono.RowSpecs.Length;
+        int colNum = nono.ColumnSpecs.Length;
+        int[,] nonoArr = nono.Matrix;
+        foreach (int[] i in nono.ColumnSpecs)
+        {
+            foreach (int j in i)
+            { 
+                cols += j.ToString() + ", ";
+            }
+            cols += "\n";
+        }
+
+        foreach (int[] i in nono.RowSpecs)
+        {
+            foreach (int j in i)
+            {
+                rows += j.ToString() + ", ";
+            }
+            rows += "\n";
+        }
+
+        foreach (int i in nono.Matrix)
+        {
+            Debug.Log(i);
+        }
+
+        for (int i = 0; i < rowNum; i++)
+        {
+            for (int j = 0; j < colNum; j++)
+            {
+                nonogram += nonoArr[i, j] + "  ";
+            }
+            nonogram += "\n";
+        }
+
+        Debug.Log(rows);
+        Debug.Log(cols);
+        Debug.Log(nonogram);
     }
 
 
