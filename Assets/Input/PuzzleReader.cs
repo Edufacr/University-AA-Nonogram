@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class PuzzleReader : MonoBehaviour
+public class PuzzleReader
 {
 
     private int rows, columns;
