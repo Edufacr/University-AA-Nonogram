@@ -37,11 +37,6 @@ public class MenuScript : MonoBehaviour
             rows += "\n";
         }
 
-        foreach (int i in nono.Matrix)
-        {
-            Debug.Log(i);
-        }
-
         for (int i = 0; i < rowNum; i++)
         {
             for (int j = 0; j < colNum; j++)
