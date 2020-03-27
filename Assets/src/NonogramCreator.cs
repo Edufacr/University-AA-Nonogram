@@ -29,6 +29,8 @@ public class NonogramCreator
         puzzle.Matrix = new int[_reader.Rows, _reader.Columns];
         puzzle.ColumnSpecs = SpecsConvert(_reader.ColumnSpecs);
         puzzle.RowSpecs = SpecsConvert(_reader.RowSpecs);
+        puzzle.Rows = _reader.Rows;
+        puzzle.Columns = _reader.Columns;
         return true;
 
     }

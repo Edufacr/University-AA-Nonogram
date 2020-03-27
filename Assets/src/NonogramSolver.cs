@@ -27,11 +27,21 @@ public class NonogramSolver
 
     private void RegularSolve(Nonogram pNonogram)
     {
+        int[][] columnSpecs = pNonogram.ColumnSpecs;
+        int[][] rowSpecs = pNonogram.RowSpecs;
+        int[,] matrix = pNonogram.Matrix;
+        int rows = pNonogram.Rows;
+        int columns = pNonogram.Columns;
 
+        Debug.Log(pNonogram.ToString());
     }
 
     private void AnimatedSolve(Nonogram pNonogram)
     {
-
+        int[][] columnSpecs = pNonogram.ColumnSpecs;
+        int[][] rowSpecs = pNonogram.RowSpecs;
+        int[,] matrix = pNonogram.Matrix;
+        int rows = pNonogram.Rows;
+        int columns = pNonogram.Columns;
     }
 }
