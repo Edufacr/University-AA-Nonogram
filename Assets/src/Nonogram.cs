@@ -7,6 +7,8 @@ public class Nonogram
     private int[,] _matrix;
     private int[][] _columnSpecs;
     private int[][] _rowsSpecs;
+    private int rows;
+    private int columns;
 
     private static Nonogram _instance;
 
@@ -41,9 +43,35 @@ public class Nonogram
         set => _columnSpecs = value;
     }
 
-    public int[][] RowsSpecs
+    public int[][] RowSpecs
     {
         get => _rowsSpecs;
         set => _rowsSpecs = value;
+    }
+
+    public int Rows
+    {
+        get => rows;
+        set => rows = value;
+    }
+
+    public int Columns
+    {
+        get => columns;
+        set => columns = value;
+    }
+
+    public override string ToString()
+    {
+        string nonogram = "";
+        for (int i = 0; i < _rowsSpecs.Length; i++)
+        {
+            for (int j = 0; j < _columnSpecs.Length; j++)
+            {
+                nonogram += _matrix[i, j] + "  ";
+            }
+            nonogram += "\n";
+        }
+        return nonogram;
     }
 }
