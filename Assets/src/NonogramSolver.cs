@@ -61,20 +61,33 @@ public class NonogramSolver
         for(int clueIndex = 0; clueIndex < rows; clueIndex++)
         {
             int[] clue = columnSpecs[clueIndex];
-
             
             if (clue.Length == 1 && clue[0] >= colMin)
             {
-                midFill(clue[0], clueIndex);
+                midColumnFill(clue[0], clueIndex);
             }
             else if ((clue.Length - 1) + clue.Sum() == rows)
             {
-                segmentedFill(clue, clueIndex);
+                segmentedColumnFill(clue, clueIndex);
+            }
+        }
+
+        for (int clueIndex = 0; clueIndex < columns; clueIndex++)
+        {
+            int[] clue = rowSpecs[clueIndex];
+
+            if (clue.Length == 1 && clue[0] >= rowMin)
+            {
+                midRowFill(clue[0], clueIndex);
+            }
+            else if ((clue.Length - 1) + clue.Sum() == columns)
+            {
+                segmentedRowFill(clue, clueIndex);
             }
         }
     }
 
-    private void midFill(int pClue, int pColNum)
+    private void midColumnFill(int pClue, int pColNum)
     {
         int initialIndex = rows - pClue;
         int finalIndex = rows - initialIndex - 1;
@@ -86,7 +99,19 @@ public class NonogramSolver
         }
     }
 
-    private void segmentedFill(int[] pClue, int pColNum)
+    private void midRowFill(int pClue, int pRowNum)
+    {
+        int initialIndex = columns - pClue;
+        int finalIndex = columns - initialIndex - 1;
+
+        while (initialIndex <= finalIndex)
+        {
+            matrix[pRowNum, initialIndex] = 1;
+            initialIndex++;
+        }
+    }
+
+    private void segmentedColumnFill(int[] pClue, int pColNum)
     {
         int cellIndex = 0;
         for (int segmentIndex = 0; segmentIndex < pClue.Length; segmentIndex++)
@@ -94,6 +119,20 @@ public class NonogramSolver
             for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
             {
                 matrix[cellIndex, pColNum] = 1;
+                cellIndex++;
+            }
+            cellIndex++;
+        }
+    }
+
+    private void segmentedRowFill(int[] pClue, int pRowNum)
+    {
+        int cellIndex = 0;
+        for (int segmentIndex = 0; segmentIndex < pClue.Length; segmentIndex++)
+        {
+            for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
+            {
+                matrix[pRowNum, cellIndex] = 1;
                 cellIndex++;
             }
             cellIndex++;
