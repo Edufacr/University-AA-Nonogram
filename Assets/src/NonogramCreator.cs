@@ -8,12 +8,16 @@ public class NonogramCreator
 
     private static NonogramCreator _instance;
     private PuzzleReader _reader;
+    private static String nonogramPath;
     // Start is called before the first frame update
 
     private NonogramCreator()
     {
         _reader = new PuzzleReader();
-        CreateNonogram("Assets/Input/15-15-03.txt"); //temp hasta que se vea como se llama a crear el nonogram
+        if (nonogramPath == null)
+        {
+            CreateNonogram("Assets/Input/non-square.txt"); //temp hasta que se vea como se llama a crear el nonogram
+        }
     }
 
     public static NonogramCreator GetInstance()
@@ -51,5 +55,10 @@ public class NonogramCreator
             retSpecs.Add(specGroup.ToArray());
         }
         return retSpecs.ToArray();
+    }
+
+    public void SetNonogramPath(String pPath)
+    {
+        nonogramPath = pPath;
     }
 }
