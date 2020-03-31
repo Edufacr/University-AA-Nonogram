@@ -58,7 +58,7 @@ public class NonogramSolver
     // Regular solution section
     private void RegularSolve(Nonogram pNonogram)
     {
-        for(int clueIndex = 0; clueIndex < rows; clueIndex++)
+        for(int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
         {
             int[] clue = columnSpecs[clueIndex];
             
@@ -72,7 +72,7 @@ public class NonogramSolver
             }
         }
 
-        for (int clueIndex = 0; clueIndex < columns; clueIndex++)
+        for (int clueIndex = 0; clueIndex < rowSpecs.Length; clueIndex++)
         {
             int[] clue = rowSpecs[clueIndex];
 
