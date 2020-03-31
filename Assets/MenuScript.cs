@@ -29,7 +29,6 @@ public class MenuScript : MonoBehaviour
     public void SelectPuzzle()
     {
         string path = EditorUtility.OpenFilePanel("", "", "txt");
-        creator.SetNonogramPath(path);
-        Debug.Log(path);
+        creator.CreateNonogram(path);
     }
 }

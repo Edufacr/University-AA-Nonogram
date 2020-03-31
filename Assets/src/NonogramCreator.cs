@@ -14,10 +14,8 @@ public class NonogramCreator
     private NonogramCreator()
     {
         _reader = new PuzzleReader();
-        if (nonogramPath == null)
-        {
-            CreateNonogram("Assets/Input/non-square.txt"); //temp hasta que se vea como se llama a crear el nonogram
-        }
+        CreateNonogram("Assets/Input/non-square.txt"); //temp hasta que se vea como se llama a crear el nonogram
+        
     }
 
     public static NonogramCreator GetInstance()
