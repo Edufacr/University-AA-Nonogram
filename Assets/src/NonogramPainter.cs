@@ -35,10 +35,19 @@ public class NonogramPainter : MonoBehaviour
     {
         GameObject square = Instantiate(squarePrefab, GetPosition(pRow,pColumn),Quaternion.identity);
         square.transform.parent = squareHolder.transform;
+        SetSquareSize(square);
         string squareName = "Square: " + pRow + "," + pColumn;
         square.transform.name = squareName;
 
         return square;
+    }
+
+    private void SetSquareSize(GameObject pSquare)
+    {
+        float holderRectWidth = squareHolder.GetComponent<RectTransform>().rect.width;
+        float holderRectHeight = squareHolder.GetComponent<RectTransform>().rect.height;
+        Vector3 scaleChange = new Vector3(holderRectWidth/_columns,holderRectHeight/_rows);
+        pSquare.transform.localScale += scaleChange;
     }
 
     private Vector3 GetPosition(int pRow, int pColumn)
