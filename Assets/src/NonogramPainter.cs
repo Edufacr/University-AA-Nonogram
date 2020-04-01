@@ -22,7 +22,7 @@ public class NonogramPainter : MonoBehaviour
     public void CreateGrid()
     {
         _grid = new GameObject[_rows,_columns];
-        for (int row = _rows; row > 0; row--)
+        for (int row = _rows - 1; row >= 0; row--)
         {
             for (int column = 0; column < _columns; column++)
             {
@@ -45,8 +45,8 @@ public class NonogramPainter : MonoBehaviour
     {
         Vector3[] holderCorners = new Vector3[4];
         squareHolder.GetComponent<RectTransform>().GetWorldCorners(holderCorners);
-
-        return new Vector3(pColumn, pRow);//+holder corners
+        
+        return new Vector3(pColumn,pRow)+holderCorners[0];
     }
     
     
