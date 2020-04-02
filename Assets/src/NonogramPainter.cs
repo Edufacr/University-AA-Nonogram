@@ -11,12 +11,14 @@ public class NonogramPainter : MonoBehaviour
     
     private int _columns;
     private int _rows;
+    private Vector3 _squareSize;
     private GameObject[,] _grid;
     
     public void SetGridSize(int pRows, int pColumns)
     {
         _rows = pRows;
         _columns = pColumns;
+        _squareSize = GetSquareSize();
     }
 
     public void CreateGrid()
@@ -35,19 +37,17 @@ public class NonogramPainter : MonoBehaviour
     {
         GameObject square = Instantiate(squarePrefab, GetPosition(pRow,pColumn),Quaternion.identity);
         square.transform.parent = squareHolder.transform;
-        SetSquareSize(square);
-        string squareName = "Square: " + pRow + "," + pColumn;
-        square.transform.name = squareName;
+        square.transform.localScale = _squareSize;
+        square.transform.name = "Square: " + pRow + "," + pColumn;
 
         return square;
     }
 
-    private void SetSquareSize(GameObject pSquare)
+    private Vector3 GetSquareSize()
     {
         float holderRectWidth = squareHolder.GetComponent<RectTransform>().rect.width;
         float holderRectHeight = squareHolder.GetComponent<RectTransform>().rect.height;
-        Vector3 scaleChange = new Vector3(holderRectWidth/_columns,holderRectHeight/_rows);
-        pSquare.transform.localScale += scaleChange;
+        return new Vector3(holderRectWidth/_columns,holderRectHeight/_rows);
     }
 
     private Vector3 GetPosition(int pRow, int pColumn)
