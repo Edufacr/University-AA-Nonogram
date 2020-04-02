@@ -22,7 +22,7 @@ public class NonogramPainter : MonoBehaviour
     public void CreateGrid()
     {
         _grid = new GameObject[_rows,_columns];
-        for (int row = _rows - 1; row >= 0; row--)
+        for (int row = 0; row < _rows; row++)
         {
             for (int column = 0; column < _columns; column++)
             {
@@ -63,7 +63,7 @@ public class NonogramPainter : MonoBehaviour
 // Start is called before the first frame update
     void Start()
     {
-        SetGridSize(2,4);
+        SetGridSize(4,4);
         CreateGrid();
     }
 
