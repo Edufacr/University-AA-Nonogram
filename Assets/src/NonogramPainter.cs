@@ -36,7 +36,8 @@ public class NonogramPainter : MonoBehaviour
     private GameObject InstantiateSquare(int pRow, int pColumn)
     {
         GameObject square = Instantiate(squarePrefab, GetPosition(pRow,pColumn),Quaternion.identity);
-        square.transform.parent = squareHolder.transform;
+        //GameObject square = Instantiate(squarePrefab, squareHolder.transform);
+        //square.transform.parent = squareHolder.transform;
         square.transform.localScale = _squareSize;
         square.transform.name = "Square: " + pRow + "," + pColumn;
 
@@ -52,10 +53,20 @@ public class NonogramPainter : MonoBehaviour
 
     private Vector3 GetPosition(int pRow, int pColumn)
     {
+        float squareRadiusX = (squareHolder.GetComponent<RectTransform>().rect.width / _columns)/2;
+        float squareRadiusY = (squareHolder.GetComponent<RectTransform>().rect.height / _rows)/2;
         Vector3[] holderCorners = new Vector3[4];
-        squareHolder.GetComponent<RectTransform>().GetWorldCorners(holderCorners);
         
-        return new Vector3(pColumn,pRow)+holderCorners[0];
+        float x = squareRadiusX * (1 + 2 * pColumn);
+        float y = squareRadiusY * (1 + 2 * pRow);
+        squareHolder.GetComponent<RectTransform>().GetWorldCorners(holderCorners);
+
+        Debug.Log("Radio X: "+squareRadiusX);
+        Debug.Log("Radio Y: "+squareRadiusY);
+        Debug.Log("X: "+x);
+        Debug.Log("Y: "+y);
+        Debug.Log(holderCorners[0].ToString());
+        return new Vector3(x,y)+holderCorners[0]; //0 es la esquina izquierda abajo debe cambiarse cuando se invierta la posicion (0,0)
     }
     
     
@@ -63,7 +74,7 @@ public class NonogramPainter : MonoBehaviour
 // Start is called before the first frame update
     void Start()
     {
-        SetGridSize(4,4);
+        SetGridSize(10,10);
         CreateGrid();
     }
 
