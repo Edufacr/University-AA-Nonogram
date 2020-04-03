@@ -21,7 +21,6 @@ public class GridManager : MonoBehaviour
     {
         _rows = pRows;
         _columns = pColumns;
-        transform.position = new Vector3(_columns,_rows);
     }
     
     public void CreateGrid()
@@ -46,8 +45,8 @@ public class GridManager : MonoBehaviour
 
     private Vector3 GetPosition(int pRow, int pColumn)
     {
-        float x = pRow * offset;
-        float y = pColumn * offset;
+        float x = (pRow - _rows/2) * offset;
+        float y = (pColumn - _columns/2) * offset;
         return new Vector3(x,y);
     }
     // Start is called before the first frame update
