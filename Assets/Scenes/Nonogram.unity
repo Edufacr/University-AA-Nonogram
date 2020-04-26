@@ -155,9 +155,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b56107b563167844aa177c6109e0915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 8840918564338580374, guid: 26558377ae7157b4db19b5553368fa12,
-    type: 3}
-  offset: 1.5
+  rows: 2
+  cols: 2
+  gridSize: {x: 5, y: 5}
+  gridOffset: {x: 0, y: 0}
+  cellSprite: {fileID: 21300000, guid: 32e4358cfad4948698940cdcfbcc9ade, type: 3}
 --- !u!1 &2000240977
 GameObject:
   m_ObjectHideFlags: 0
