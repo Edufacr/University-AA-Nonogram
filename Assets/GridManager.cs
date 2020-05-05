@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField] private GameObject cellPrefab;
     [SerializeField]
     private int rows;
     [SerializeField]
@@ -25,14 +26,19 @@ public class GridManager : MonoBehaviour
         InitCells(); //Initialize all cells
 	}
 
+    void InitializeCells()
+    {
+        
+    }
     void InitCells() {
-        GameObject cellObject = new GameObject();
+        GameObject cellObject = cellPrefab;
 
         //creates an empty object and adds a sprite renderer component -> set the sprite to cellSprite
-        cellObject.AddComponent<SpriteRenderer>().sprite = cellSprite;
+        //cellObject.AddComponent<SpriteRenderer>().sprite = cellSprite;
+        
 
         //catch the size of the sprite
-        cellSize = cellSprite.bounds.size;
+        cellSize = cellObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
 
         //get the new cell size -> adjust the size of the cells to fit the size of the grid
         Vector2 newCellSize = new Vector2(gridSize.x / (float)cols, gridSize.y / (float)rows);
