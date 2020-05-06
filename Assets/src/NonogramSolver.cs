@@ -48,15 +48,26 @@ public class NonogramSolver
 
         if (!pAnimated)
         {
+            RegularPreSolve(pNonogram);
             RegularSolve(pNonogram);
         }
-        else AnimatedSolve(pNonogram);
+        else
+        {
+            AnimatedPreSolve(pNonogram);
+            AnimatedSolve(pNonogram);
+        }
 
         Debug.Log(pNonogram.ToString());
     }
 
+
     // Regular solution section
     private void RegularSolve(Nonogram pNonogram)
+    {
+
+    }
+
+    private void RegularPreSolve(Nonogram pNonogram)
     {
         for(int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
         {
@@ -126,8 +137,6 @@ public class NonogramSolver
                 matrix[cellIndex, pColNum] = 0;
                 cellIndex++;
             }
-            
-            
         }
     }
 
@@ -150,6 +159,12 @@ public class NonogramSolver
     }
 
     // Animated solution
+    private void AnimatedPreSolve(Nonogram pNonogram)
+    {
+
+    }
+
+
     private void AnimatedSolve(Nonogram pNonogram)
     {
        
