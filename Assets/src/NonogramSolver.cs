@@ -62,10 +62,54 @@ public class NonogramSolver
 
 
     // Regular solution section
-    private void RegularSolve(Nonogram pNonogram)
+    private bool RegularSolve(Nonogram pNonogram)
     {
-
+        int [] coordinates = new int[2];
+        if(!GetNextPos(coordinates)){
+            return true;
+        }
+      
+        for(int value = 1; value >= 0; value--){
+            if(Coherent(value))
+            {
+                matrix[coordinates[0], coordinates[1]] = value;
+                if(RegularSolve(pNonogram))
+                {
+                    return true;
+                }
+                matrix[coordinates[0], coordinates[1]] = -1;
+            }
+        }
+        return false;
     }
+
+    private bool Coherent(int pValue)
+    {
+        if(pValue == 1){
+            //for
+            // dos contadores uno para grupos y otro para los bloques 
+
+        }
+
+        return true;
+    }
+
+    private bool GetNextPos(int[] pCoordinates){
+        for(int row = pCoordinates[0]; row < columns; row++)
+        {
+            for(int column = pCoordinates[1]; column < rows; columns++)
+            {
+                if(matrix[row,column] == -1)
+                {
+                    pCoordinates[0] = row;
+                    pCoordinates[1] = column;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     private void RegularPreSolve(Nonogram pNonogram)
     {
