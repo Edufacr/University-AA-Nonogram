@@ -33,6 +33,15 @@ public class NonogramCreator
         puzzle.RowSpecs = SpecsConvert(_reader.RowSpecs);
         puzzle.Rows = _reader.Rows;
         puzzle.Columns = _reader.Columns;
+
+        for (int i = 0; i < puzzle.RowSpecs.Length; i++)
+        {
+            for (int j = 0; j < puzzle.ColumnSpecs.Length; j++)
+            {
+                puzzle.Matrix[i, j] = -1;
+            }
+        }
+
         return true;
 
     }

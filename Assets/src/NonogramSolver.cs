@@ -76,11 +76,11 @@ public class NonogramSolver
         {
             int[] clue = rowSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= rowMin)
+            if (clue.Length == 1 && clue[0] >= rowMin) 
             {
                 midRowFill(clue[0], clueIndex);
             }
-            else if ((clue.Length - 1) + clue.Sum() == columns)
+            else if ((clue.Length - 1) + clue.Sum() == columns) 
             {
                 segmentedRowFill(clue, clueIndex);
             }
@@ -121,7 +121,13 @@ public class NonogramSolver
                 matrix[cellIndex, pColNum] = 1;
                 cellIndex++;
             }
-            cellIndex++;
+            if (cellIndex < rows)
+            {
+                matrix[cellIndex, pColNum] = 0;
+                cellIndex++;
+            }
+            
+            
         }
     }
 
@@ -135,19 +141,17 @@ public class NonogramSolver
                 matrix[pRowNum, cellIndex] = 1;
                 cellIndex++;
             }
-            cellIndex++;
+            if (cellIndex < columns)
+            {
+                matrix[pRowNum, cellIndex] = 0;
+                cellIndex++;
+            }
         }
     }
 
     // Animated solution
     private void AnimatedSolve(Nonogram pNonogram)
     {
-        int[][] columnSpecs = pNonogram.ColumnSpecs;
-        int[][] rowSpecs = pNonogram.RowSpecs;
-        int[,] matrix = pNonogram.Matrix;
-        int rows = pNonogram.Rows;
-        int columns = pNonogram.Columns;
-        int rowMin = (rows / 2) + 1;
-        int colMin = (columns / 2) + 1;
+       
     }
 }
