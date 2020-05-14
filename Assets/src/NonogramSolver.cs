@@ -207,90 +207,60 @@ public class NonogramSolver
 
     private void RegularPreSolve(Nonogram pNonogram)
     {
-        for (int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
+        for (int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++) // goes through all of the columns
         {
             int[] clue = columnSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= colMin)
+            if (clue.Length == 1 && clue[0] >= colMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midColumnFill(clue[0], clueIndex);
+                midFill(clue[0], rows, i => matrix[i, clueIndex] = 1);
             }
-            else if ((clue.Length - 1) + clue.Sum() == rows)
+            else if ((clue.Length - 1) + clue.Sum() == rows) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedColumnFill(clue, clueIndex);
+                segmentedFill(clue, rows, (row, num) => matrix[row, clueIndex] = num);
             }
         }
 
-        for (int clueIndex = 0; clueIndex < rowSpecs.Length; clueIndex++)
+        for (int clueIndex = 0; clueIndex < rowSpecs.Length; clueIndex++) // goes through all of the rows
         {
             int[] clue = rowSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= rowMin)
+            if (clue.Length == 1 && clue[0] >= rowMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midRowFill(clue[0], clueIndex);
+                midFill(clue[0], columns, i => matrix[clueIndex, i] = 1);
             }
-            else if ((clue.Length - 1) + clue.Sum() == columns)
+            else if ((clue.Length - 1) + clue.Sum() == columns) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedRowFill(clue, clueIndex);
+                segmentedFill(clue, columns, (column, num) => matrix[clueIndex, column] = num);
             }
         }
     }
 
-    private void midColumnFill(int pClue, int pColNum)
+    private void midFill(int pClue, int pLineLength, Action<int> filler)
     {
-        int initialIndex = rows - pClue;
-        int finalIndex = rows - initialIndex - 1;
+        int initialIndex = pLineLength - pClue;
+        int finalIndex = pLineLength - initialIndex - 1;
 
         while (initialIndex <= finalIndex)
         {
-            matrix[initialIndex, pColNum] = 1;
+            filler(initialIndex);
             initialIndex++;
         }
     }
 
-    private void midRowFill(int pClue, int pRowNum)
-    {
-        int initialIndex = columns - pClue;
-        int finalIndex = columns - initialIndex - 1;
-
-        while (initialIndex <= finalIndex)
-        {
-            matrix[pRowNum, initialIndex] = 1;
-            initialIndex++;
-        }
-    }
-
-    private void segmentedColumnFill(int[] pClue, int pColNum)
+    private void segmentedFill(int[] pClue, int pLineLength, Action<int, int> filler)
     {
         int cellIndex = 0;
         for (int segmentIndex = 0; segmentIndex < pClue.Length; segmentIndex++)
         {
             for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
             {
-                matrix[cellIndex, pColNum] = 1;
+                filler(cellIndex, 1);
                 cellIndex++;
             }
-            if (cellIndex < rows)
+            if (cellIndex < pLineLength)
             {
-                matrix[cellIndex, pColNum] = 0;
-                cellIndex++;
-            }
-        }
-    }
-
-    private void segmentedRowFill(int[] pClue, int pRowNum)
-    {
-        int cellIndex = 0;
-        for (int segmentIndex = 0; segmentIndex < pClue.Length; segmentIndex++)
-        {
-            for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
-            {
-                matrix[pRowNum, cellIndex] = 1;
-                cellIndex++;
-            }
-            if (cellIndex < columns)
-            {
-                matrix[pRowNum, cellIndex] = 0;
+                filler(cellIndex, 0);
                 cellIndex++;
             }
         }
