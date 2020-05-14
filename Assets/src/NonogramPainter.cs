@@ -15,9 +15,10 @@ public class NonogramPainter : MonoBehaviour
         gridManager.InitializeGrid(pNonogram.Rows,pNonogram.Columns);
     }
     
-    public void PaintNonogram()
+    public void PaintNonogram(Nonogram pNonogram)
     {
         gridManager.CreateGrid();
+        PaintGrid(pNonogram);
     }
 
     public void PaintGrid(Nonogram pNonogram)

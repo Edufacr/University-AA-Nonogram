@@ -22,7 +22,7 @@ public class MenuScript : MonoBehaviour
     {
         if (!puzzleSelected) return;
         solver.Solve(Nonogram.GetInstance(), null);
-        painter.PaintGrid(Nonogram.GetInstance());
+        painter.PaintNonogram(Nonogram.GetInstance());
     }
 
     public void AnimateSolution()
