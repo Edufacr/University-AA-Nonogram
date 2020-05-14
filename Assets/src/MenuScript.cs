@@ -36,7 +36,11 @@ public class MenuScript : MonoBehaviour
     public void SelectPuzzle()
     {
         string path = EditorUtility.OpenFilePanel("", "", "txt");
-        creator.CreateNonogram(path);
-        painter.InitializePainter(Nonogram.GetInstance());
+        if (creator.CreateNonogram(path))
+        {
+            painter.InitializePainter(Nonogram.GetInstance());
+            puzzleSelected = true;
+        }
+        
     }
 }
