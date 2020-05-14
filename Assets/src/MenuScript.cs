@@ -21,7 +21,7 @@ public class MenuScript : MonoBehaviour
     public void Solution()
     {
         if (!puzzleSelected) return;
-        solver.Solve(Nonogram.GetInstance(), false);
+        solver.Solve(Nonogram.GetInstance(), null);
         painter.PaintGrid(Nonogram.GetInstance());
     }
 
@@ -29,7 +29,7 @@ public class MenuScript : MonoBehaviour
     {
         if (puzzleSelected)
         {
-            solver.Solve(Nonogram.GetInstance(), true);
+            solver.Solve(Nonogram.GetInstance(), painter);
         }
     }
 

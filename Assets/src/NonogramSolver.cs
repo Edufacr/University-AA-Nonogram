@@ -28,7 +28,7 @@ public class NonogramSolver
         return _instance ?? (_instance = new NonogramSolver());
     }
 
-    public void Solve(Nonogram pNonogram, bool pAnimated)
+    public void Solve(Nonogram pNonogram, NonogramPainter painter)
     {
         matrix = pNonogram.Matrix;
         rowSpecs = pNonogram.RowSpecs;
@@ -46,7 +46,7 @@ public class NonogramSolver
         rowEven = (columns % 2 == 0 ? true : false);
         colEven = (rows % 2 == 0 ? true : false);
 
-        if (!pAnimated)
+        if (painter == null)
         {
             RegularPreSolve(pNonogram);
             RegularSolve(pNonogram);
