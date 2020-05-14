@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 
 public class NonogramSolver
 {
@@ -30,6 +32,7 @@ public class NonogramSolver
 
     public void Solve(Nonogram pNonogram, NonogramPainter painter)
     {
+        // calculates different parameters needed for presolve and/or backtracking solve
         matrix = pNonogram.Matrix;
         rowSpecs = pNonogram.RowSpecs;
         columnSpecs = pNonogram.ColumnSpecs;
@@ -49,74 +52,165 @@ public class NonogramSolver
         if (painter == null)
         {
             RegularPreSolve(pNonogram);
-            RegularSolve(pNonogram);
+            if (RegularSolve(pNonogram))
+            {
+                Debug.Log(pNonogram.ToString());
+            }
+            else Debug.Log("No tiene solución");
         }
         else
         {
             AnimatedPreSolve(pNonogram);
             AnimatedSolve(pNonogram);
         }
-
-        Debug.Log(pNonogram.ToString());
     }
-
 
     // Regular solution section
     private bool RegularSolve(Nonogram pNonogram)
     {
-        int [] coordinates = new int[2];
-        if(!GetNextPos(coordinates)){
+        int row = -1; // starts with a placeholder
+        int column = -1; // starts with a placeholder
+        bool finished = true;
+
+        for (int iRow = 0; iRow < rows; iRow++)
+        {
+            for (int jCol = 0; jCol < columns; jCol++)
+            {
+                if (matrix[iRow, jCol] == -1) // both for's look for the next empty cell
+                {
+                    row = iRow;
+                    column = jCol;
+                    finished = false;
+                    break;
+                }
+            }
+
+            if (!finished) // if something was found, it needs to break out of this for loop too
+            {
+                break;
+            }
+        }
+
+        // finished checking all of the cells
+        if (finished)
+        {
             return true;
         }
-      
-        for(int value = 1; value >= 0; value--){
-            if(Coherent(value))
-            {
-                matrix[coordinates[0], coordinates[1]] = value;
-                if(RegularSolve(pNonogram))
-                {
-                    return true;
-                }
-                matrix[coordinates[0], coordinates[1]] = -1;
-            }
-        }
-        return false;
-    }
 
-    private bool Coherent(int pValue)
-    {
-        if(pValue == 1){
-            //for
-            // dos contadores uno para grupos y otro para los bloques 
-
-        }
-
-        return true;
-    }
-
-    private bool GetNextPos(int[] pCoordinates){
-        for(int row = pCoordinates[0]; row < columns; row++)
+        // checks to see if a 1 can be placed in the empty cell found above
+        if (Coherent(1, row, column))
         {
-            for(int column = pCoordinates[1]; column < rows; columns++)
+            if (RegularSolve(pNonogram)) // if the 1 worked, it moves to the next cell
             {
-                if(matrix[row,column] == -1)
-                {
-                    pCoordinates[0] = row;
-                    pCoordinates[1] = column;
-                    return true;
-                }
+                return true; // if the above call returned true, it found a solution
             }
         }
+
+        // checks to see if a 0 can be placed in the empty cell found above
+        if (Coherent(0, row, column))
+        {
+            if (RegularSolve(pNonogram)) // if the 0 worked, it moves to the next cell
+            {
+                return true;
+            }
+        }
+
+        matrix[row, column] = -1; // if neither the 1 or the 0 worked, it restores the cell
+        return false; // this activates the backtracking
+    }
+
+    private bool Coherent(int pValue, int pRow, int pCol)
+    {
+        // places the value (1 or 0) in the specified coordinate
+        matrix[pRow, pCol] = pValue;
+        // checks if the move works for the row
+        if (CheckLine(pCol, columns, rowSpecs[pRow], i => matrix[pRow, i]))
+        {
+            // if it works, then it checks the column
+            // if the column works, it means that the move works completely, so it automatically returns true. Else, it will return false
+            return CheckLine(pRow, rows, columnSpecs[pCol], i => matrix[i, pCol]);
+        }
+        // since the move didn't work for the row, we don't need to check the column, so we return false
         return false;
     }
 
+    private bool CheckLine(int pCurrentPosition, int pSize, int[] specs, Func<int, int> getter)
+    {
+        int blockCount = 0; // keeps track of the amount of line blocks in the line
+        int count = 0; // keeps track of the block size
+        bool building = false; // true if the last move was a 1
+
+        // checks everything up to (and including) pCurrentPosition
+        for (int i = 0; i <= pCurrentPosition; i++)
+        {
+            if (getter(i) == 1) //if the cell has a value of one
+            {
+                count++; //we increase the size of the current block by one
+                if (building) //if the cell at i-1 was a 1
+                {
+                    if (count > specs[blockCount]) //checks to see if this current 1 makes the block bigger than specified
+                    {
+                        return false;
+                    }
+                }
+                else if (blockCount > specs.Length - 1) // if the previous move was a 0, we check to see if this new block being started makes more blocks in the line than specified
+                {
+                    return false;
+                }
+                building = true; // if everything seems allright, we keep log that we placed a 1
+            }
+            else
+            {
+                if (building) //if the cell at i-1 was a 1
+                {
+                    if (count != specs[blockCount]) // checks to see if we are making the block shorter than specified
+                    {
+                        return false;
+                    }
+                    count = 0; // reset the block counter, since we are placing a 0, hence ending the previous block
+                    blockCount++; // we count the block that has been finished by this 0
+                }
+                building = false; // if everything seems allright, we keep log that we placed a 0
+            }
+        }
+
+        // if the line has been finished, we check to see if its requirements were met
+        // since some checking for the move i isn't checked until move 1+1, and there will be no i+1 at the end of the line
+        // we need to manually do the final check here
+        if (pCurrentPosition == pSize - 1)
+        {
+            if (building) //this means that the last piece placed was a 1
+            {
+                // checks if the last block equals the specifiec length and if we made enough blocks
+                return (count == specs[blockCount]) & (blockCount == specs.Length - 1);
+            }
+            else // else, this means that the last piece placed was a 0
+            {
+                // checks to see if we made enough blocks. No -1 because an extra one was added by the last run of the for loop
+                return blockCount == specs.Length;
+            }
+        }
+        /*
+        Si voy a poner un 1, tengo que chequear
+            - que no esté haciendo el bloque más grande de la cuenta
+            - no hacer más bloques de la cuenta
+        Si voy a poner un 0, tengo que chequear
+            - que no esté terminando un bloque antes de tiempo
+        Si ya terminé, tengo que
+            - revisar que todo se completó bien
+            - si lo último fue un 1, reviso el tamaño del bloque y la cantidad de bloques
+            - si lo último que puse fue un 0 (!building), tengo que revisar que tuve todos los bloques
+        */
+
+        return true; // if the row hasn't ended and it got to this point, it means that the move is coherent in the given context
+    }
 
     private void RegularPreSolve(Nonogram pNonogram)
     {
-        for(int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
+        for (int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
         {
             int[] clue = columnSpecs[clueIndex];
-            
+
             if (clue.Length == 1 && clue[0] >= colMin)
             {
                 midColumnFill(clue[0], clueIndex);
@@ -131,11 +225,11 @@ public class NonogramSolver
         {
             int[] clue = rowSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= rowMin) 
+            if (clue.Length == 1 && clue[0] >= rowMin)
             {
                 midRowFill(clue[0], clueIndex);
             }
-            else if ((clue.Length - 1) + clue.Sum() == columns) 
+            else if ((clue.Length - 1) + clue.Sum() == columns)
             {
                 segmentedRowFill(clue, clueIndex);
             }
@@ -208,10 +302,9 @@ public class NonogramSolver
 
     }
 
-
     private void AnimatedSolve(Nonogram pNonogram)
     {
-       
+
     }
 
     private void PaintCell(int pRow,int pColumn, int pColorNum,NonogramPainter pPainter)
