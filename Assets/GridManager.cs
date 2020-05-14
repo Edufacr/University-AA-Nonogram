@@ -8,42 +8,68 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Vector2 gridSize;
-    private int rows;
-    private int cols;
-    private Vector2 gridOffset;
-    private Vector2 cellSize;
+    [SerializeField] private Color filledCellColor;
+    [SerializeField] private Color emptyCellColor;
+    private int _rows;
+    private int _columns;
+    private Vector2 _gridOffset;
+    private Vector2 _cellSize;
+    
+    private GameObject[,] _grid;
+   
     
     void Start () {
         SetColRowNum(6,6);
         InitializeCells();
-        InstantiateCells();
+        CreateGrid();
+        ChangeCellSprite(0,0,1);
+        ChangeCellSprite(2,2,1);
+        ChangeCellSprite(3,3,0);
 	}
 
+    void ChangeCellSprite(int pRow, int pColumn, int pColorNum)
+    {
+        SpriteRenderer spriteRenderer = _grid[pRow, pColumn].GetComponent<SpriteRenderer>();
+        if (pColorNum == 1)
+        {
+            spriteRenderer.color = filledCellColor;
+        }
+        else
+        {
+            spriteRenderer.color = emptyCellColor;
+        }
+            
+    }
     void SetColRowNum(int pRows, int pColumns)
     {
-        rows = pRows;
-        cols = pColumns;
+        _rows = pRows;
+        _columns = pColumns;
     }
-    void InstantiateCells()
+    void CreateGrid()
     {
-        Vector2 transformPos = transform.position;
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                Vector2 cellPos = new Vector2(col * cellSize.x + gridOffset.x + transformPos.x, row * cellSize.y + gridOffset.y + transformPos.y);
-                GameObject cell = Instantiate(cellPrefab, cellPos, Quaternion.identity);
-                cell.transform.parent = transform;
+        _grid = new GameObject[_rows,_columns];
+        for (int row = 0; row < _rows; row++) {
+            for (int column = 0; column < _columns; column++) {
+                _grid[row, column] = InstantiateCell(row, column,transform.position);
             }
         }
     }
-
+    GameObject InstantiateCell(int pRow, int pColumn, Vector2 pBasePosition)
+    {
+        Vector2 cellPos = new Vector2(pColumn * _cellSize.x + _gridOffset.x + pBasePosition.x, pRow * _cellSize.y + _gridOffset.y + pBasePosition.y);
+        GameObject cell = Instantiate(cellPrefab, cellPos, Quaternion.identity);
+        cell.transform.parent = transform;
+        cell.transform.name = "Cell: " + pRow + "," + pColumn;
+        return cell;
+    }
     void InitializeCells()
     {
-        cellSize = cellPrefab.GetComponent<SpriteRenderer>().sprite.bounds.size;
-        Vector2 newCellSize = new Vector2(gridSize.x / (float)cols, gridSize.y / (float)rows);
-        cellPrefab.transform.localScale = new Vector2(newCellSize.x / cellSize.x,newCellSize.y / cellSize.y);
-        cellSize = newCellSize;
-        gridOffset.x = -(gridSize.x / 2) + cellSize.x / 2;
-        gridOffset.y = -(gridSize.y / 2) + cellSize.y / 2;
+        _cellSize = cellPrefab.GetComponent<SpriteRenderer>().sprite.bounds.size;
+        Vector2 newCellSize = new Vector2(gridSize.x / (float)_columns, gridSize.y / (float)_rows);
+        cellPrefab.transform.localScale = new Vector2(newCellSize.x / _cellSize.x,newCellSize.y / _cellSize.y);
+        _cellSize = newCellSize;
+        _gridOffset.x = -(gridSize.x / 2) + _cellSize.x / 2;
+        _gridOffset.y = -(gridSize.y / 2) + _cellSize.y / 2;
     }
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, gridSize);
