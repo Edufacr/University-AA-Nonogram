@@ -27,6 +27,25 @@ public class GridManager : MonoBehaviour
         ChangeCellSprite(3,3,0);
 	}
 
+    void MirrorGrid()
+    {
+        for (int row = 0; row < _rows/2; row++)
+        {
+            int rowToSwap = (_rows - 1) - row;
+            for (int column = 0; column < _columns; column++)
+            {
+                SwapGridElements(row,column,rowToSwap,column);
+            }
+        }
+    }
+
+    void SwapGridElements(int pRow1, int pColumn1, int pRow2, int pColumn2)
+    {
+        GameObject temp = _grid[pRow1, pColumn1];
+        _grid[pRow1, pColumn1] = _grid[pRow2, pColumn2];
+        _grid[pRow2, pColumn2] = temp;
+    }
+
     void ChangeCellSprite(int pRow, int pColumn, int pColorNum)
     {
         SpriteRenderer spriteRenderer = _grid[pRow, pColumn].GetComponent<SpriteRenderer>();
@@ -53,6 +72,7 @@ public class GridManager : MonoBehaviour
                 _grid[row, column] = InstantiateCell(row, column,transform.position);
             }
         }
+        MirrorGrid();
     }
     GameObject InstantiateCell(int pRow, int pColumn, Vector2 pBasePosition)
     {
