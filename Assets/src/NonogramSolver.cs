@@ -213,4 +213,9 @@ public class NonogramSolver
     {
        
     }
+
+    private void PaintCell(int pRow,int pColumn, int pColorNum,NonogramPainter pPainter)
+    {
+        pPainter.PaintGridCell(pRow,pColumn,pColorNum);
+    }
 }
