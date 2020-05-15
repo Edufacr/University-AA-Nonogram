@@ -9,7 +9,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Vector2 gridSize;
     [SerializeField] private Color filledCellColor;
-    [SerializeField] private Color emptyCellColor;
     private int _rows;
     private int _columns;
     private Vector2 _gridOffset;
@@ -28,17 +27,10 @@ public class GridManager : MonoBehaviour
         MirrorGrid();
     }
         
-    public void ChangeCellSprite(int pRow, int pColumn, int pColorNum)
+    public void ChangeCellSprite(int pRow, int pColumn)
     {
         SpriteRenderer spriteRenderer = _grid[pRow, pColumn].GetComponent<SpriteRenderer>();
-        if (pColorNum == 1)
-        {
-            spriteRenderer.color = filledCellColor;
-        }
-        else
-        {
-            spriteRenderer.color = emptyCellColor;
-        }
+        spriteRenderer.color = filledCellColor;
     }
     
     void OnDrawGizmos() {
