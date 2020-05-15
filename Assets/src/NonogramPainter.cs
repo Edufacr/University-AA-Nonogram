@@ -33,6 +33,7 @@ public class NonogramPainter : MonoBehaviour
 
     public void AnimatedPaint()
     {
+        gridManager.CreateGrid();
         StartCoroutine(PaintFromQueue(toPaintQueue));
     }
 
