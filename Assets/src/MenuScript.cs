@@ -30,6 +30,7 @@ public class MenuScript : MonoBehaviour
         if (puzzleSelected)
         {
             solver.Solve(Nonogram.GetInstance(), painter);
+            painter.AnimatedPaint();
         }
     }
 

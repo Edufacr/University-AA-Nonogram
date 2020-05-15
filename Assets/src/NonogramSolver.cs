@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,17 +9,17 @@ using UnityEngine;
 public class NonogramSolver
 {
     private static NonogramSolver _instance;
-    private static int[,] matrix;
-    private static int[][] rowSpecs;
-    private static int[][] columnSpecs;
-    private static int rows;
-    private static int columns;
-    private static int rowMin;
-    private static int colMin;
-    private static int rowMid;
-    private static int colMid;
-    private static bool rowEven;
-    private static bool colEven;
+    private static int[,] _matrix;
+    private static int[][] _rowSpecs;
+    private static int[][] _columnSpecs;
+    private static int _rows;
+    private static int _columns;
+    private static int _rowMin;
+    private static int _colMin;
+    private static int _rowMid;
+    private static int _colMid;
+    private static bool _rowEven;
+    private static bool _colEven;
 
     private NonogramSolver()
     {
@@ -33,21 +34,21 @@ public class NonogramSolver
     public void Solve(Nonogram pNonogram, NonogramPainter painter)
     {
         // calculates different parameters needed for presolve and/or backtracking solve
-        matrix = pNonogram.Matrix;
-        rowSpecs = pNonogram.RowSpecs;
-        columnSpecs = pNonogram.ColumnSpecs;
+        _matrix = pNonogram.Matrix;
+        _rowSpecs = pNonogram.RowSpecs;
+        _columnSpecs = pNonogram.ColumnSpecs;
 
-        rows = pNonogram.Rows;
-        columns = pNonogram.Columns;
+        _rows = pNonogram.Rows;
+        _columns = pNonogram.Columns;
 
-        rowMin = (columns / 2) + 1;
-        colMin = (rows / 2) + 1;
+        _rowMin = (_columns / 2) + 1;
+        _colMin = (_rows / 2) + 1;
 
-        rowMid = rowMin + 1;
-        colMid = colMin + 1;
+        _rowMid = _rowMin + 1;
+        _colMid = _colMin + 1;
 
-        rowEven = (columns % 2 == 0 ? true : false);
-        colEven = (rows % 2 == 0 ? true : false);
+        _rowEven = (_columns % 2 == 0 ? true : false);
+        _colEven = (_rows % 2 == 0 ? true : false);
 
         if (painter == null)
         {
@@ -60,7 +61,8 @@ public class NonogramSolver
         }
         else
         {
-            AnimatedPreSolve(pNonogram);
+            painter.PaintNonogram(Nonogram.GetInstance());//Polish despues
+            AnimatedPreSolve(pNonogram,painter);
             AnimatedSolve(pNonogram);
         }
     }
@@ -72,11 +74,11 @@ public class NonogramSolver
         int column = -1; // starts with a placeholder
         bool finished = true;
 
-        for (int iRow = 0; iRow < rows; iRow++)
+        for (int iRow = 0; iRow < _rows; iRow++)
         {
-            for (int jCol = 0; jCol < columns; jCol++)
+            for (int jCol = 0; jCol < _columns; jCol++)
             {
-                if (matrix[iRow, jCol] == -1) // both for's look for the next empty cell
+                if (_matrix[iRow, jCol] == -1) // both for's look for the next empty cell
                 {
                     row = iRow;
                     column = jCol;
@@ -115,20 +117,20 @@ public class NonogramSolver
             }
         }
 
-        matrix[row, column] = -1; // if neither the 1 or the 0 worked, it restores the cell
+        _matrix[row, column] = -1; // if neither the 1 or the 0 worked, it restores the cell
         return false; // this activates the backtracking
     }
 
     private bool Coherent(int pValue, int pRow, int pCol)
     {
         // places the value (1 or 0) in the specified coordinate
-        matrix[pRow, pCol] = pValue;
+        _matrix[pRow, pCol] = pValue;
         // checks if the move works for the row
-        if (CheckLine(pCol, columns, rowSpecs[pRow], i => matrix[pRow, i]))
+        if (CheckLine(pCol, _columns, _rowSpecs[pRow], i => _matrix[pRow, i]))
         {
             // if it works, then it checks the column
             // if the column works, it means that the move works completely, so it automatically returns true. Else, it will return false
-            return CheckLine(pRow, rows, columnSpecs[pCol], i => matrix[i, pCol]);
+            return CheckLine(pRow, _rows, _columnSpecs[pCol], i => _matrix[i, pCol]);
         }
         // since the move didn't work for the row, we don't need to check the column, so we return false
         return false;
@@ -207,29 +209,29 @@ public class NonogramSolver
 
     private void RegularPreSolve(Nonogram pNonogram)
     {
-        for (int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++)
+        for (int clueIndex = 0; clueIndex < _columnSpecs.Length; clueIndex++)
         {
-            int[] clue = columnSpecs[clueIndex];
+            int[] clue = _columnSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= colMin)
+            if (clue.Length == 1 && clue[0] >= _colMin)
             {
                 midColumnFill(clue[0], clueIndex);
             }
-            else if ((clue.Length - 1) + clue.Sum() == rows)
+            else if ((clue.Length - 1) + clue.Sum() == _rows)
             {
                 segmentedColumnFill(clue, clueIndex);
             }
         }
 
-        for (int clueIndex = 0; clueIndex < rowSpecs.Length; clueIndex++)
+        for (int clueIndex = 0; clueIndex < _rowSpecs.Length; clueIndex++)
         {
-            int[] clue = rowSpecs[clueIndex];
+            int[] clue = _rowSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= rowMin)
+            if (clue.Length == 1 && clue[0] >= _rowMin)
             {
                 midRowFill(clue[0], clueIndex);
             }
-            else if ((clue.Length - 1) + clue.Sum() == columns)
+            else if ((clue.Length - 1) + clue.Sum() == _columns)
             {
                 segmentedRowFill(clue, clueIndex);
             }
@@ -238,24 +240,24 @@ public class NonogramSolver
 
     private void midColumnFill(int pClue, int pColNum)
     {
-        int initialIndex = rows - pClue;
-        int finalIndex = rows - initialIndex - 1;
+        int initialIndex = _rows - pClue;
+        int finalIndex = _rows - initialIndex - 1;
 
         while (initialIndex <= finalIndex)
         {
-            matrix[initialIndex, pColNum] = 1;
+            _matrix[initialIndex, pColNum] = 1;
             initialIndex++;
         }
     }
 
     private void midRowFill(int pClue, int pRowNum)
     {
-        int initialIndex = columns - pClue;
-        int finalIndex = columns - initialIndex - 1;
+        int initialIndex = _columns - pClue;
+        int finalIndex = _columns - initialIndex - 1;
 
         while (initialIndex <= finalIndex)
         {
-            matrix[pRowNum, initialIndex] = 1;
+            _matrix[pRowNum, initialIndex] = 1;
             initialIndex++;
         }
     }
@@ -267,12 +269,12 @@ public class NonogramSolver
         {
             for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
             {
-                matrix[cellIndex, pColNum] = 1;
+                _matrix[cellIndex, pColNum] = 1;
                 cellIndex++;
             }
-            if (cellIndex < rows)
+            if (cellIndex < _rows)
             {
-                matrix[cellIndex, pColNum] = 0;
+                _matrix[cellIndex, pColNum] = 0;
                 cellIndex++;
             }
         }
@@ -285,30 +287,30 @@ public class NonogramSolver
         {
             for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
             {
-                matrix[pRowNum, cellIndex] = 1;
+                _matrix[pRowNum, cellIndex] = 1;
                 cellIndex++;
             }
-            if (cellIndex < columns)
+            if (cellIndex < _columns)
             {
-                matrix[pRowNum, cellIndex] = 0;
+                _matrix[pRowNum, cellIndex] = 0;
                 cellIndex++;
             }
         }
     }
 
     // Animated solution
-    private void AnimatedPreSolve(Nonogram pNonogram)
+    private void AnimatedPreSolve(Nonogram pNonogram,NonogramPainter pPainter)
     {
-
+        for (int i = 0; i < pNonogram.Rows; i++)
+        {
+            for (int j = 0; j < pNonogram.Columns; j++)
+            {
+                pPainter.AddToPaintQueue(i,j);
+            }
+        }
     }
-
     private void AnimatedSolve(Nonogram pNonogram)
     {
 
-    }
-
-    private void PaintCell(int pRow,int pColumn, int pColorNum,NonogramPainter pPainter)
-    {
-        pPainter.PaintGridCell(pRow,pColumn,pColorNum);
     }
 }
