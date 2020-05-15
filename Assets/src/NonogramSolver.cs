@@ -8,17 +8,17 @@ using UnityEngine;
 public class NonogramSolver
 {
     private static NonogramSolver _instance;
-    private static int[,] matrix;
-    private static int[][] rowSpecs;
-    private static int[][] columnSpecs;
-    private static int rows;
-    private static int columns;
-    private static int rowMin;
-    private static int colMin;
-    private static int rowMid;
-    private static int colMid;
-    private static bool rowEven;
-    private static bool colEven;
+    private static int[,] _matrix;
+    private static int[][] _rowSpecs;
+    private static int[][] _columnSpecs;
+    private static int _rows;
+    private static int _columns;
+    private static int _rowMin;
+    private static int _colMin;
+    private static int _rowMid;
+    private static int _colMid;
+    private static bool _rowEven;
+    private static bool _colEven;
 
     private NonogramSolver()
     {
@@ -30,26 +30,26 @@ public class NonogramSolver
         return _instance ?? (_instance = new NonogramSolver());
     }
 
-    public void Solve(Nonogram pNonogram, bool pAnimated)
+    public void Solve(Nonogram pNonogram, NonogramPainter pPainter)
     {
         // calculates different parameters needed for presolve and/or backtracking solve
-        matrix = pNonogram.Matrix;
-        rowSpecs = pNonogram.RowSpecs;
-        columnSpecs = pNonogram.ColumnSpecs;
+        _matrix = pNonogram.Matrix;
+        _rowSpecs = pNonogram.RowSpecs;
+        _columnSpecs = pNonogram.ColumnSpecs;
 
-        rows = pNonogram.Rows;
-        columns = pNonogram.Columns;
+        _rows = pNonogram.Rows;
+        _columns = pNonogram.Columns;
 
-        rowMin = (columns / 2) + 1;
-        colMin = (rows / 2) + 1;
+        _rowMin = (_columns / 2) + 1;
+        _colMin = (_rows / 2) + 1;
 
-        rowMid = rowMin + 1;
-        colMid = colMin + 1;
+        _rowMid = _rowMin + 1;
+        _colMid = _colMin + 1;
 
-        rowEven = (columns % 2 == 0 ? true : false);
-        colEven = (rows % 2 == 0 ? true : false);
+        _rowEven = (_columns % 2 == 0 ? true : false);
+        _colEven = (_rows % 2 == 0 ? true : false);
 
-        if (!pAnimated)
+        if (pPainter == null)
         {
             RegularPreSolve(pNonogram);
             if (RegularSolve(pNonogram))
@@ -72,11 +72,11 @@ public class NonogramSolver
         int column = -1; // starts with a placeholder
         bool finished = true;
 
-        for (int iRow = 0; iRow < rows; iRow++)
+        for (int iRow = 0; iRow < _rows; iRow++)
         {
-            for (int jCol = 0; jCol < columns; jCol++)
+            for (int jCol = 0; jCol < _columns; jCol++)
             {
-                if (matrix[iRow, jCol] == -1) // both for's look for the next empty cell
+                if (_matrix[iRow, jCol] == -1) // both for's look for the next empty cell
                 {
                     row = iRow;
                     column = jCol;
@@ -115,20 +115,20 @@ public class NonogramSolver
             }
         }
 
-        matrix[row, column] = -1; // if neither the 1 or the 0 worked, it restores the cell
+        _matrix[row, column] = -1; // if neither the 1 or the 0 worked, it restores the cell
         return false; // this activates the backtracking
     }
 
     private bool Coherent(int pValue, int pRow, int pCol)
     {
         // places the value (1 or 0) in the specified coordinate
-        matrix[pRow, pCol] = pValue;
+        _matrix[pRow, pCol] = pValue;
         // checks if the move works for the row
-        if (CheckLine(pCol, columns, rowSpecs[pRow], i => matrix[pRow, i]))
+        if (CheckLine(pCol, _columns, _rowSpecs[pRow], i => _matrix[pRow, i]))
         {
             // if it works, then it checks the column
             // if the column works, it means that the move works completely, so it automatically returns true. Else, it will return false
-            return CheckLine(pRow, rows, columnSpecs[pCol], i => matrix[i, pCol]);
+            return CheckLine(pRow, _rows, _columnSpecs[pCol], i => _matrix[i, pCol]);
         }
         // since the move didn't work for the row, we don't need to check the column, so we return false
         return false;
@@ -207,35 +207,35 @@ public class NonogramSolver
 
     private void RegularPreSolve(Nonogram pNonogram)
     {
-        for (int clueIndex = 0; clueIndex < columnSpecs.Length; clueIndex++) // goes through all of the columns
+        for (int clueIndex = 0; clueIndex < _columnSpecs.Length; clueIndex++) // goes through all of the columns
         {
-            int[] clue = columnSpecs[clueIndex];
+            int[] clue = _columnSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= colMin) // if there is only one block in the line and it is big enough, we can fill from the center
+            if (clue.Length == 1 && clue[0] >= _colMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], rows, i => matrix[i, clueIndex] = 1); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                midFill(clue[0], _rows, i => _matrix[i, clueIndex] = 1); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
                 // midFill only places 1s and uses a fixed column here, so only the parameter for the row is needed
             }
-            else if ((clue.Length - 1) + clue.Sum() == rows) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
+            else if ((clue.Length - 1) + clue.Sum() == _rows) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, rows, (row, num) => matrix[row, clueIndex] = num); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                segmentedFill(clue, _rows, (row, num) => _matrix[row, clueIndex] = num); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
                 // num parameter depends on what segmentedFill needs to place (1 or 0)
                 // column is fixed (clueIndex), the row (which is passed as a parameter in the above Action, changes
             }
         }
 
-        for (int clueIndex = 0; clueIndex < rowSpecs.Length; clueIndex++) // goes through all of the rows
+        for (int clueIndex = 0; clueIndex < _rowSpecs.Length; clueIndex++) // goes through all of the rows
         {
-            int[] clue = rowSpecs[clueIndex];
+            int[] clue = _rowSpecs[clueIndex];
 
-            if (clue.Length == 1 && clue[0] >= rowMin) // if there is only one block in the line and it is big enough, we can fill from the center
+            if (clue.Length == 1 && clue[0] >= _rowMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], columns, i => matrix[clueIndex, i] = 1); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                midFill(clue[0], _columns, i => _matrix[clueIndex, i] = 1); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
                 // midFill only places 1s and uses a fixed row here, so only the parameter for the column is needed
             }
-            else if ((clue.Length - 1) + clue.Sum() == columns) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
+            else if ((clue.Length - 1) + clue.Sum() == _columns) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, columns, (column, num) => matrix[clueIndex, column] = num); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                segmentedFill(clue, _columns, (column, num) => _matrix[clueIndex, column] = num); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
                 // num parameter depends on what segmentedFill needs to place (1 or 0)
                 // row is fixed (clueIndex), the column (which is passed as a parameter in the above Action, changes
             }
