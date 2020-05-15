@@ -213,11 +213,14 @@ public class NonogramSolver
 
             if (clue.Length == 1 && clue[0] >= colMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], rows, i => matrix[i, clueIndex] = 1);
+                midFill(clue[0], rows, i => matrix[i, clueIndex] = 1); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                // midFill only places 1s and uses a fixed column here, so only the parameter for the row is needed
             }
             else if ((clue.Length - 1) + clue.Sum() == rows) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, rows, (row, num) => matrix[row, clueIndex] = num);
+                segmentedFill(clue, rows, (row, num) => matrix[row, clueIndex] = num); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                // num parameter depends on what segmentedFill needs to place (1 or 0)
+                // column is fixed (clueIndex), the row (which is passed as a parameter in the above Action, changes
             }
         }
 
@@ -227,11 +230,14 @@ public class NonogramSolver
 
             if (clue.Length == 1 && clue[0] >= rowMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], columns, i => matrix[clueIndex, i] = 1);
+                midFill(clue[0], columns, i => matrix[clueIndex, i] = 1); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                // midFill only places 1s and uses a fixed row here, so only the parameter for the column is needed
             }
             else if ((clue.Length - 1) + clue.Sum() == columns) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, columns, (column, num) => matrix[clueIndex, column] = num);
+                segmentedFill(clue, columns, (column, num) => matrix[clueIndex, column] = num); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                // num parameter depends on what segmentedFill needs to place (1 or 0)
+                // row is fixed (clueIndex), the column (which is passed as a parameter in the above Action, changes
             }
         }
     }
@@ -240,10 +246,12 @@ public class NonogramSolver
     {
         int initialIndex = pLineLength - pClue;
         int finalIndex = pLineLength - initialIndex - 1;
+        // these two indices make up the length specified by the clue and places the block in the middle of the line
 
+        // iterates through the line in the range specified above
         while (initialIndex <= finalIndex)
         {
-            filler(initialIndex);
+            filler(initialIndex); // puts a 1 in the cell
             initialIndex++;
         }
     }
@@ -251,16 +259,18 @@ public class NonogramSolver
     private void segmentedFill(int[] pClue, int pLineLength, Action<int, int> filler)
     {
         int cellIndex = 0;
+        // outer loop to iterate over the specs
         for (int segmentIndex = 0; segmentIndex < pClue.Length; segmentIndex++)
         {
+            //nested loop to iterate over the line for the length specified by each clue
             for (int segmentCount = 0; segmentCount < pClue[segmentIndex]; segmentCount++)
             {
-                filler(cellIndex, 1);
+                filler(cellIndex, 1); // writes a one on the specified cell
                 cellIndex++;
             }
-            if (cellIndex < pLineLength)
+            if (cellIndex < pLineLength) // to avoid IndexOutOfRange
             {
-                filler(cellIndex, 0);
+                filler(cellIndex, 0); // places a 0 to separate each block
                 cellIndex++;
             }
         }
