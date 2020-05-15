@@ -19,6 +19,7 @@ public class NonogramSolver
     private static int _colMid;
     private static bool _rowEven;
     private static bool _colEven;
+    
 
     private NonogramSolver()
     {
@@ -48,25 +49,13 @@ public class NonogramSolver
 
         _rowEven = (_columns % 2 == 0 ? true : false);
         _colEven = (_rows % 2 == 0 ? true : false);
-
-        if (pPainter == null)
-        {
-            RegularPreSolve(pNonogram);
-            if (RegularSolve(pNonogram))
-            {
-                Debug.Log(pNonogram.ToString());
-            }
-            else Debug.Log("No tiene solución");
-        }
-        else
-        {
-            AnimatedPreSolve(pNonogram);
-            AnimatedSolve(pNonogram);
-        }
+        
+        RegularPreSolve(pNonogram,pPainter);
+        RegularSolve(pNonogram,pPainter);
     }
 
     // Regular solution section
-    private bool RegularSolve(Nonogram pNonogram)
+    private bool RegularSolve(Nonogram pNonogram,NonogramPainter pPainter)
     {
         int row = -1; // starts with a placeholder
         int column = -1; // starts with a placeholder
@@ -100,7 +89,7 @@ public class NonogramSolver
         // checks to see if a 1 can be placed in the empty cell found above
         if (Coherent(1, row, column))
         {
-            if (RegularSolve(pNonogram)) // if the 1 worked, it moves to the next cell
+            if (RegularSolve(pNonogram,pPainter)) // if the 1 worked, it moves to the next cell
             {
                 return true; // if the above call returned true, it found a solution
             }
@@ -109,7 +98,7 @@ public class NonogramSolver
         // checks to see if a 0 can be placed in the empty cell found above
         if (Coherent(0, row, column))
         {
-            if (RegularSolve(pNonogram)) // if the 0 worked, it moves to the next cell
+            if (RegularSolve(pNonogram,pPainter)) // if the 0 worked, it moves to the next cell
             {
                 return true;
             }
@@ -205,7 +194,7 @@ public class NonogramSolver
         return true; // if the row hasn't ended and it got to this point, it means that the move is coherent in the given context
     }
 
-    private void RegularPreSolve(Nonogram pNonogram)
+    private void RegularPreSolve(Nonogram pNonogram,NonogramPainter pPainter)
     {
         for (int clueIndex = 0; clueIndex < _columnSpecs.Length; clueIndex++) // goes through all of the columns
         {

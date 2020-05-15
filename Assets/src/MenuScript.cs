@@ -21,17 +21,15 @@ public class MenuScript : MonoBehaviour
     public void Solution()
     {
         if (!puzzleSelected) return;
-        solver.Solve(Nonogram.GetInstance(), null);
+        solver.Solve(Nonogram.GetInstance(), painter);
         painter.PaintNonogram(Nonogram.GetInstance());
     }
 
     public void AnimateSolution()
     {
-        if (puzzleSelected)
-        {
-            solver.Solve(Nonogram.GetInstance(), painter);
-            painter.AnimatedPaint();
-        }
+        if (!puzzleSelected) return;
+        solver.Solve(Nonogram.GetInstance(), painter);
+        painter.AnimatedPaint();
     }
 
     public void SelectPuzzle()
