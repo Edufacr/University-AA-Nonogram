@@ -5,7 +5,6 @@ using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 
-
 public class NonogramSolver
 {
     private static NonogramSolver _instance;
