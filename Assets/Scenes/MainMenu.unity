@@ -388,7 +388,7 @@ MonoBehaviour:
     type: 3}
   gridSize: {x: 8, y: 8}
   filledCellColor: {r: 0.050980397, g: 0, b: 0, a: 1}
-  emptyCellColor: {r: 0.8980393, g: 0.8980393, b: 0.8980393, a: 1}
+  emptyCellColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &828391558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 706007636}
-  animatedPaintSpeed: 0.1
+  animatedPaintSpeed: 0.05
 --- !u!4 &1863662263
 Transform:
   m_ObjectHideFlags: 0
