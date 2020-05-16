@@ -87,7 +87,7 @@ public class NonogramSolver
         }
 
         // checks to see if a 1 can be placed in the empty cell found above
-        if (Coherent(1, row, column))
+        if (Coherent(1, row, column,pPainter))
         {
             if (SolveAlg(pNonogram,pPainter)) // if the 1 worked, it moves to the next cell
             {
@@ -96,7 +96,7 @@ public class NonogramSolver
         }
 
         // checks to see if a 0 can be placed in the empty cell found above
-        if (Coherent(0, row, column))
+        if (Coherent(0, row, column,pPainter))
         {
             if (SolveAlg(pNonogram,pPainter)) // if the 0 worked, it moves to the next cell
             {
@@ -108,10 +108,11 @@ public class NonogramSolver
         return false; // this activates the backtracking
     }
 
-    private bool Coherent(int pValue, int pRow, int pCol)
+    private bool Coherent(int pValue, int pRow, int pCol,NonogramPainter pPainter)
     {
         // places the value (1 or 0) in the specified coordinate
         _matrix[pRow, pCol] = pValue;
+        pPainter.AddToPaintQueue(pRow,pCol,pValue);
         // checks if the move works for the row
         if (CheckLine(pCol, _columns, _rowSpecs[pRow], i => _matrix[pRow, i]))
         {
@@ -202,13 +203,13 @@ public class NonogramSolver
 
             if (clue.Length == 1 && clue[0] >= _colMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], _rows, i => {_matrix[i, clueIndex] = 1; pPainter.AddToPaintQueue(i,clueIndex);}); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                midFill(clue[0], _rows, i => {_matrix[i, clueIndex] = 1; pPainter.AddToPaintQueue(i,clueIndex,1);}); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
                 // midFill only places 1s and uses a fixed column here, so only the parameter for the row is needed
                 // the action passed as a parameter also adds the move to the painter in case the animated solution is wanted
             }
             else if ((clue.Length - 1) + clue.Sum() == _rows) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, _rows, (row, num) => {_matrix[row, clueIndex] = num; pPainter.AddToPaintQueue(row, clueIndex);}); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
+                segmentedFill(clue, _rows, (row, num) => {_matrix[row, clueIndex] = num; pPainter.AddToPaintQueue(row, clueIndex,num);}); // we pass rows as length for filling columns, since the amount of cells in a column == number of rows
                 // num parameter depends on what segmentedFill needs to place (1 or 0)
                 // column is fixed (clueIndex), the row (which is passed as a parameter in the above Action, changes
                 // the action passed as a parameter also adds the move to the painter in case the animated solution is wanted
@@ -221,13 +222,13 @@ public class NonogramSolver
 
             if (clue.Length == 1 && clue[0] >= _rowMin) // if there is only one block in the line and it is big enough, we can fill from the center
             {
-                midFill(clue[0], _columns, i => {_matrix[clueIndex, i] = 1; pPainter.AddToPaintQueue(clueIndex,i);}); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                midFill(clue[0], _columns, i => {_matrix[clueIndex, i] = 1; pPainter.AddToPaintQueue(clueIndex,i,1);}); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
                 // midFill only places 1s and uses a fixed row here, so only the parameter for the column is needed
                 // the action passed as a parameter also adds the move to the painter in case the animated solution is wanted
             }
             else if ((clue.Length - 1) + clue.Sum() == _columns) // if the sum of the clues plus the spaces needed to separate the blocks equal the length of the column
             {
-                segmentedFill(clue, _columns, (column, num) => {_matrix[clueIndex, column] = num; pPainter.AddToPaintQueue(clueIndex,column);}); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
+                segmentedFill(clue, _columns, (column, num) => {_matrix[clueIndex, column] = num; pPainter.AddToPaintQueue(clueIndex,column,num);}); // we pass columns as length for filling rows, since the amount of cells in a row == number of columns
                 // num parameter depends on what segmentedFill needs to place (1 or 0)
                 // row is fixed (clueIndex), the column (which is passed as a parameter in the above Action, changes
                 // the action passed as a parameter also adds the move to the painter in case the animated solution is wanted

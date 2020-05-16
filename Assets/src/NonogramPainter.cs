@@ -26,9 +26,9 @@ public class NonogramPainter : MonoBehaviour
         PaintGrid(pNonogram);
     }
 
-    public void AddToPaintQueue(int pRow, int pColumn)
+    public void AddToPaintQueue(int pRow, int pColumn,int pColorNum)
     {
-        toPaintQueue.Enqueue(new[]{pRow,pColumn});
+        toPaintQueue.Enqueue(new[]{pRow,pColumn,pColorNum});
     }
 
     public void AnimatedPaint()
@@ -42,7 +42,7 @@ public class NonogramPainter : MonoBehaviour
         foreach (int[] coordinates in pQueue)
         {
             yield return new WaitForSeconds(animatedPaintSpeed);
-            PaintGridCell(coordinates[0], coordinates[1]);
+            PaintGridCell(coordinates[0], coordinates[1],coordinates[2]);
         }
     }
 
@@ -55,14 +55,14 @@ public class NonogramPainter : MonoBehaviour
             {
                 if (matrix[row, column] == 1)
                 {
-                    PaintGridCell(row,column);
+                    PaintGridCell(row,column,1);
                 }
             }
         }
     }
 
-    private void PaintGridCell(int pRow, int pColumn)
+    private void PaintGridCell(int pRow, int pColumn,int pColorNum)
     {
-        gridManager.ChangeCellSprite(pRow,pColumn);
+        gridManager.ChangeCellSprite(pRow,pColumn,pColorNum);
     }
 }
