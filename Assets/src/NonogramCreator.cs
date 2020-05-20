@@ -9,13 +9,10 @@ public class NonogramCreator
     private static NonogramCreator _instance;
     private PuzzleReader _reader;
     private static String nonogramPath;
-    // Start is called before the first frame update
 
     private NonogramCreator()
     {
         _reader = new PuzzleReader();
-        CreateNonogram("Assets/Input/15-15-02.txt"); //temp hasta que se vea como se llama a crear el nonogram
-        
     }
 
     public static NonogramCreator GetInstance()
