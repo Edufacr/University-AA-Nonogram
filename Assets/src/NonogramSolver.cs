@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 
 public class NonogramSolver
@@ -33,6 +35,8 @@ public class NonogramSolver
 
     public void Solve(Nonogram pNonogram, NonogramPainter pPainter)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         // calculates different parameters needed for presolve and/or backtracking solve
         _matrix = pNonogram.Matrix;
         _rowSpecs = pNonogram.RowSpecs;
@@ -52,6 +56,8 @@ public class NonogramSolver
         
         PreSolve(pNonogram,pPainter);
         SolveAlg(pNonogram,pPainter);
+        stopwatch.Stop();
+        Debug.Log(stopwatch.ElapsedMilliseconds.ToString()); //se puede imprimir en pantalla
     }
 
     //  solution section
