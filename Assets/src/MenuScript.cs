@@ -23,6 +23,7 @@ public class MenuScript : MonoBehaviour
         if (!puzzleSelected) {
             SelectPuzzle();
         }
+        painter.ClearNonogram();
         solver.Solve(Nonogram.GetInstance(), painter);
         painter.PaintNonogram(Nonogram.GetInstance());
     }
@@ -32,6 +33,7 @@ public class MenuScript : MonoBehaviour
         if (!puzzleSelected) {
             SelectPuzzle();
         }
+        painter.ClearNonogram();
         solver.Solve(Nonogram.GetInstance(), painter);
         painter.AnimatedPaint();
     }

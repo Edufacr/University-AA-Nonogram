@@ -43,14 +43,10 @@ public class GridManager : MonoBehaviour
 
     public void DeleteGrid()
     {
-        for (int row = 0; row < _rows; row++)
+        foreach (Transform child in transform)
         {
-            for (int column = 0; column < _columns; column++)
-            {
-                Destroy(_grid[row, column]);
-            }
+            Destroy(child.gameObject);
         }
-        _grid = null;
     }
     
     void OnDrawGizmos() {
