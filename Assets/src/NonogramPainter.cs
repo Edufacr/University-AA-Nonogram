@@ -62,6 +62,10 @@ public class NonogramPainter : MonoBehaviour
                 {
                     PaintGridCell(row,column,1);
                 }
+                if (matrix[row, column] == -1) //borrar despues de pruebas
+                {
+                    PaintGridCell(row,column,0);
+                }
             }
         }
     }

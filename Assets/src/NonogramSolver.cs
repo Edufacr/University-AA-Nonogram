@@ -55,21 +55,21 @@ public class NonogramSolver
         _colEven = (_rows % 2 == 0 ? true : false);
         
         PreSolve(pNonogram,pPainter);
-        SolveAlg(pNonogram,pPainter);
+        SolveAlg(pNonogram,pPainter,0,0);
         stopwatch.Stop();
         Debug.Log(stopwatch.ElapsedMilliseconds.ToString()); //se puede imprimir en pantalla
     }
 
     //  solution section
-    private bool SolveAlg(Nonogram pNonogram,NonogramPainter pPainter)
+    private bool SolveAlg(Nonogram pNonogram,NonogramPainter pPainter,int currentRow,int currentColumn)
     {
         int row = -1; // starts with a placeholder
         int column = -1; // starts with a placeholder
         bool finished = true;
 
-        for (int iRow = 0; iRow < _rows; iRow++)
+        for (int iRow = currentRow; iRow < _rows; iRow++)
         {
-            for (int jCol = 0; jCol < _columns; jCol++)
+            for (int jCol = currentColumn; jCol < _columns; jCol++)
             {
                 if (_matrix[iRow, jCol] == -1) // both for's look for the next empty cell
                 {
@@ -84,6 +84,7 @@ public class NonogramSolver
             {
                 break;
             }
+            currentColumn = 0;
         }
 
         // finished checking all of the cells
@@ -95,7 +96,7 @@ public class NonogramSolver
         // checks to see if a 1 can be placed in the empty cell found above
         if (Coherent(1, row, column,pPainter))
         {
-            if (SolveAlg(pNonogram,pPainter)) // if the 1 worked, it moves to the next cell
+            if (SolveAlg(pNonogram,pPainter,row,column)) // if the 1 worked, it moves to the next cell
             {
                 return true; // if the above call returned true, it found a solution
             }
@@ -104,7 +105,7 @@ public class NonogramSolver
         // checks to see if a 0 can be placed in the empty cell found above
         if (Coherent(0, row, column,pPainter))
         {
-            if (SolveAlg(pNonogram,pPainter)) // if the 0 worked, it moves to the next cell
+            if (SolveAlg(pNonogram,pPainter,row,column)) // if the 0 worked, it moves to the next cell
             {
                 return true;
             }
