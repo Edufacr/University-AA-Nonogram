@@ -47,6 +47,8 @@ public class GridManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        _grid = null;
     }
     
     void OnDrawGizmos() {
