@@ -40,6 +40,18 @@ public class GridManager : MonoBehaviour
         }
         
     }
+
+    public void DeleteGrid()
+    {
+        for (int row = 0; row < _rows; row++)
+        {
+            for (int column = 0; column < _columns; column++)
+            {
+                Destroy(_grid[row, column]);
+            }
+        }
+        _grid = null;
+    }
     
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, gridSize);

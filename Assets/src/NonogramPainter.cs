@@ -37,6 +37,11 @@ public class NonogramPainter : MonoBehaviour
         StartCoroutine(PaintFromQueue(toPaintQueue));
     }
 
+    public void ClearNonogram()
+    {
+        gridManager.DeleteGrid();
+    }
+
     private IEnumerator PaintFromQueue(Queue<int[]> pQueue)
     {
         foreach (int[] coordinates in pQueue)
